@@ -233,7 +233,11 @@ export const projects: Project[] = [
       fr: "Logiciel de bureau pour la gestion hospitalière, développé en C++ avec Qt.",
       en: "Desktop software for hospital management, built in C++ with Qt.",
     },
-    tags: [T.desktop, T.management, T.health],
+    role: {
+      fr: "Projet réalisé seule.",
+      en: "Built solo.",
+    },
+    tags: [T.desktop, T.management, T.health, T.solo],
     tech: ["C++", "Qt"],
     hue: ["#06B6D4", "#3B6CFF"],
   },
