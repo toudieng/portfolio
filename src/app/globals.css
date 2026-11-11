@@ -1,0 +1,204 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ───────────────── Design tokens ───────────────── */
+:root {
+  --bg: #faf8f3;
+  --bg-elevated: #ffffff;
+  --fg: #0b1230;
+  --muted: #4a5578;
+  --border: rgb(11 18 48 / 0.1);
+  --primary: #2b55e6; /* cobalt */
+  --primary-soft: rgb(43 85 230 / 0.12);
+  --accent: #a85f00; /* amber, darkened for contrast on ivory */
+  --accent-soft: rgb(245 181 71 / 0.22);
+  --accent-bright: #e0920f;
+  --glow-1: rgb(59 108 255 / 0.28);
+  --glow-2: rgb(245 181 71 / 0.32);
+  --grid: rgb(11 18 48 / 0.06);
+  --grain-opacity: 0.05;
+  color-scheme: light;
+}
+
+.dark {
+  --bg: #070b1a;
+  --bg-elevated: #0d1328;
+  --fg: #e8ecf8;
+  --muted: #9aa6c4;
+  --border: rgb(255 255 255 / 0.09);
+  --primary: #6f93ff;
+  --primary-soft: rgb(59 108 255 / 0.16);
+  --accent: #f5b547;
+  --accent-soft: rgb(245 181 71 / 0.14);
+  --accent-bright: #f5b547;
+  --glow-1: rgb(59 108 255 / 0.45);
+  --glow-2: rgb(245 181 71 / 0.22);
+  --grid: rgb(255 255 255 / 0.045);
+  --grain-opacity: 0.07;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-background: var(--bg);
+  --color-elevated: var(--bg-elevated);
+  --color-foreground: var(--fg);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-soft: var(--primary-soft);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-display-face);
+
+  --animate-blob: blob 22s ease-in-out infinite;
+  --animate-blob-slow: blob 30s ease-in-out infinite reverse;
+  --animate-shine: shine 6s linear infinite;
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-pulse-ring: pulse-ring 2.4s cubic-bezier(0.2, 0.6, 0.4, 1) infinite;
+
+  @keyframes blob {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    33% { transform: translate3d(8%, -6%, 0) scale(1.12); }
+    66% { transform: translate3d(-6%, 8%, 0) scale(0.92); }
+  }
+  @keyframes shine {
+    from { background-position: 0% 50%; }
+    to { background-position: 200% 50%; }
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes pulse-ring {
+    0% { transform: scale(0.8); opacity: 0.7; }
+    100% { transform: scale(2.4); opacity: 0; }
+  }
+}
+
+/* ───────────────── Base ───────────────── */
+html {
+  -webkit-text-size-adjust: 100%;
+  overflow-x: clip;
+  scroll-padding-top: 5rem;
+}
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--primary);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* ───────────────── Utilities ───────────────── */
+@utility font-display {
+  font-family: var(--font-display-face), ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -0.03em;
+}
+
+@utility text-gradient {
+  background-image: linear-gradient(100deg, var(--primary) 0%, var(--accent-bright) 50%, var(--primary) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility bg-grid {
+  background-image:
+    linear-gradient(to right, var(--grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+@utility glass {
+  background: color-mix(in oklab, var(--bg-elevated) 70%, transparent);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border: 1px solid var(--border);
+}
+
+/* Film grain overlay (static SVG noise, no JS) */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  opacity: var(--grain-opacity);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  mix-blend-mode: overlay;
+}
+
+/* Spotlight card: follows --x/--y set by JS */
+.spotlight {
+  position: relative;
+  isolation: isolate;
+}
+.spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background: radial-gradient(420px circle at var(--x, 50%) var(--y, 50%), var(--primary-soft), transparent 45%);
+}
+.spotlight:hover::before { opacity: 1; }
+
+/* Gradient border used on featured cards */
+.ring-gradient {
+  position: relative;
+}
+.ring-gradient::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(140deg, color-mix(in oklab, var(--primary) 70%, transparent), transparent 40%, transparent 60%, color-mix(in oklab, var(--accent) 70%, transparent));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Dialog enter animations */
+@keyframes overlay-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes content-in {
+  from { opacity: 0; transform: translate(-50%, -46%) scale(0.97); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+.dialog-overlay[data-state="open"] { animation: overlay-in 0.25s ease-out; }
+.dialog-content[data-state="open"] { animation: content-in 0.35s cubic-bezier(0.2, 0.8, 0.2, 1); }
+
+/* CSS-only entrance (no JS needed → fast LCP) */
+@keyframes rise { from { transform: translateY(14px); } to { transform: none; } }
+.rise { animation: rise 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
