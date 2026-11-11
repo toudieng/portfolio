@@ -45,7 +45,7 @@ export const skillGroups: SkillGroup[] = [
       { fr: "Frameworks & API, services Web, architectures SOA / microservices", en: "Frameworks & APIs, web services, SOA / microservices architectures" },
       { fr: "Développement mobile et applications réparties", en: "Mobile development & distributed applications" },
     ],
-    tags: ["C", "Python", "Java", "HTML", "CSS", "JavaScript", "PHP", "JEE", ".NET", "Django", "Django REST Framework", "React", "Next.js", "Vite", "Flutter", "Dart"],
+    tags: ["C", "C++", "Python", "Java", "HTML", "CSS", "JavaScript", "PHP", "JEE", ".NET", "Django", "Django REST Framework", "React", "Next.js", "Vite", "Flutter", "Dart", "Qt"],
   },
   {
     id: "data",
@@ -230,10 +230,11 @@ export const projects: Project[] = [
     title: { fr: "Gestion hospitalière", en: "Hospital management" },
     year: "2024",
     summary: {
-      fr: "Logiciel de bureau pour la gestion hospitalière.",
-      en: "Desktop software for hospital management.",
+      fr: "Logiciel de bureau pour la gestion hospitalière, développé en C++ avec Qt.",
+      en: "Desktop software for hospital management, built in C++ with Qt.",
     },
     tags: [T.desktop, T.management, T.health],
+    tech: ["C++", "Qt"],
     hue: ["#06B6D4", "#3B6CFF"],
   },
   {
