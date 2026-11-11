@@ -45,7 +45,7 @@ export const skillGroups: SkillGroup[] = [
       { fr: "Frameworks & API, services Web, architectures SOA / microservices", en: "Frameworks & APIs, web services, SOA / microservices architectures" },
       { fr: "Développement mobile et applications réparties", en: "Mobile development & distributed applications" },
     ],
-    tags: ["C", "Python", "Java", "HTML", "CSS", "JavaScript", "PHP", "JEE", ".NET", "Django", "React", "Next.js", "Vite", "Flutter"],
+    tags: ["C", "Python", "Java", "HTML", "CSS", "JavaScript", "PHP", "JEE", ".NET", "Django", "Django REST Framework", "React", "Next.js", "Vite", "Flutter", "Dart"],
   },
   {
     id: "data",
@@ -57,7 +57,7 @@ export const skillGroups: SkillGroup[] = [
       { fr: "Big Data & NoSQL/NewSQL, calcul distribué, Business Intelligence", en: "Big Data & NoSQL/NewSQL, distributed computing, Business Intelligence" },
       { fr: "Machine Learning et programmation scientifique", en: "Machine Learning & scientific programming" },
     ],
-    tags: ["PostgreSQL", "MySQL", "SQL Server", "Oracle", "SQL", "NoSQL", "Python", "Matlab"],
+    tags: ["PostgreSQL", "MySQL", "SQL Server", "Oracle", "Supabase", "SQL", "NoSQL", "Python", "Matlab"],
   },
   {
     id: "sys",
@@ -114,7 +114,10 @@ export type Project = {
   year?: string;
   github?: string;
   demo?: string;
+  /** Highlighted project ("projet phare"), shown larger */
   featured?: boolean;
+  /** Optional screenshot in /public (e.g. "/projects/yaay-vide.png"); abstract cover otherwise */
+  image?: string;
   /** gradient hue pair for the abstract cover */
   hue: [string, string];
 };
@@ -122,85 +125,142 @@ export type Project = {
 const T = {
   fullstack: { fr: "Full-stack", en: "Full-stack" },
   ecommerce: { fr: "E-commerce", en: "E-commerce" },
+  marketplace: { fr: "Marketplace", en: "Marketplace" },
   web: { fr: "Web", en: "Web" },
   mobile: { fr: "Mobile", en: "Mobile" },
   management: { fr: "Application de gestion", en: "Management app" },
+  desktop: { fr: "Application de bureau", en: "Desktop app" },
   community: { fr: "Communautaire", en: "Community" },
+  pm: { fr: "Gestion de projet", en: "Project management" },
   showcase: { fr: "Site vitrine", en: "Showcase website" },
   gitlab: { fr: "Workflow GitLab", en: "GitLab workflow" },
-  team: { fr: "Co-développement", en: "Co-development" },
+  team: { fr: "Travail en équipe", en: "Teamwork" },
+  solo: { fr: "Projet solo", en: "Solo project" },
+  thesis: { fr: "Mémoire de Licence", en: "Bachelor's thesis" },
+  realtime: { fr: "Temps réel", en: "Real-time" },
   health: { fr: "Santé", en: "Healthcare" },
 } satisfies Record<string, L10n>;
 
+/** Order = display order. Featured projects come first. */
 export const projects: Project[] = [
-  {
-    slug: "naatal-mbay",
-    title: { fr: "Naatal Mbay", en: "Naatal Mbay" },
-    summary: {
-      fr: "Plateforme e-commerce full-stack réalisée pour le projet « Naatal Mbay ».",
-      en: "Full-stack e-commerce platform built for the “Naatal Mbay” project.",
-    },
-    tags: [T.fullstack, T.ecommerce, T.web],
-    hue: ["#3B6CFF", "#22C55E"],
-  },
   {
     slug: "yaay-vide",
     title: { fr: "Yaay Vidé", en: "Yaay Vidé" },
+    featured: true,
+    year: "2026",
     summary: {
-      fr: "Plateforme e-commerce full-stack de seconde main pensée pour les familles sénégalaises.",
-      en: "Full-stack second-hand e-commerce platform designed for Senegalese families.",
+      fr: "Marketplace de seconde main pensée pour les mamans et les familles au Sénégal.",
+      en: "Second-hand marketplace designed for mothers and families in Senegal.",
     },
-    tags: [T.fullstack, T.ecommerce, T.web],
+    description: {
+      fr: "Plateforme e-commerce full-stack de seconde main : une marketplace où les mamans au Sénégal peuvent vendre et acheter des articles d'occasion pour leur famille.",
+      en: "Full-stack second-hand e-commerce platform: a marketplace where mothers in Senegal can sell and buy pre-owned items for their families.",
+    },
+    role: {
+      fr: "Projet réalisé seule, de A à Z : conception, frontend et backend.",
+      en: "Built solo from A to Z: design, frontend and backend.",
+    },
+    tags: [T.marketplace, T.fullstack, T.solo],
+    tech: ["React", "Vite", "Django"],
     hue: ["#F5B547", "#EC4899"],
   },
   {
     slug: "yeugo",
     title: { fr: "Yeugo", en: "Yeugo" },
+    featured: true,
+    year: "2025",
     summary: {
-      fr: "Co-développement d'une application mobile de sécurité urbaine, avec gestion du workflow sur GitLab.",
-      en: "Co-developed an urban-safety mobile app, with the team workflow managed on GitLab.",
+      fr: "Application mobile de sécurité urbaine avec localisation en temps réel, co-développée en équipe.",
+      en: "Urban-safety mobile app with real-time location, co-developed as a team.",
     },
-    tags: [T.mobile, T.team, T.gitlab],
+    description: {
+      fr: "Yeugo est une application mobile de sécurité urbaine qui s'appuie sur la localisation en temps réel. Le projet a été co-développé en équipe, avec un workflow de collaboration géré sur GitLab.",
+      en: "Yeugo is an urban-safety mobile app built around real-time location. It was co-developed as a team, with the collaboration workflow managed on GitLab.",
+    },
+    role: {
+      fr: "Développeuse frontend : interfaces de l'application mobile en Flutter / Dart.",
+      en: "Frontend developer: built the mobile app's interfaces with Flutter / Dart.",
+    },
+    tags: [T.mobile, T.realtime, T.team, T.gitlab],
+    tech: ["Flutter", "Dart", "Supabase", "GitLab"],
     hue: ["#3B6CFF", "#A855F7"],
+  },
+  {
+    slug: "naatal-mbay",
+    title: { fr: "Naatal Mbay", en: "Naatal Mbay" },
+    year: "2025",
+    summary: {
+      fr: "Plateforme e-commerce full-stack pour la digitalisation de la filière maraîchère sénégalaise.",
+      en: "Full-stack e-commerce platform to digitalise Senegal's market-gardening sector.",
+    },
+    description: {
+      fr: "Naatal Mbay est une plateforme e-commerce full-stack dédiée à la digitalisation de la filière maraîchère sénégalaise. Ce projet a fait l'objet de mon mémoire de fin de cycle de Licence.",
+      en: "Naatal Mbay is a full-stack e-commerce platform dedicated to digitalising Senegal's market-gardening sector. It was the subject of my Bachelor's final thesis.",
+    },
+    role: {
+      fr: "Projet réalisé entièrement seule, dans le cadre de mon mémoire de Licence : frontend, backend et API.",
+      en: "Built entirely on my own as my Bachelor's thesis project: frontend, backend and API.",
+    },
+    tags: [T.ecommerce, T.fullstack, T.thesis],
+    tech: ["React", "Vite", "Django", "Django REST Framework"],
+    hue: ["#3B6CFF", "#22C55E"],
   },
   {
     slug: "restaurant",
     title: { fr: "Gestion de restaurant", en: "Restaurant management" },
+    year: "2024",
     summary: {
-      fr: "Plateforme de gestion de restaurant.",
-      en: "Restaurant management platform.",
+      fr: "Plateforme de gestion de restaurant : du menu en ligne à la commande, jusqu'au service sur place ou en livraison.",
+      en: "Restaurant management platform: from the online menu to ordering, through dine-in service or delivery.",
     },
-    tags: [T.management, T.web],
+    description: {
+      fr: "Plateforme web qui gère toute l'activité d'un restaurant : menu en ligne, prise de commande, puis service sur place ou livraison.",
+      en: "Web platform covering a restaurant's whole workflow: online menu, ordering, then dine-in service or delivery.",
+    },
+    role: {
+      fr: "Réalisé en binôme, avec un partage du travail à parts égales.",
+      en: "Built in a pair, with the work split equally.",
+    },
+    tags: [T.management, T.web, T.team],
+    tech: ["Django"],
     hue: ["#F5B547", "#EF4444"],
-  },
-  {
-    slug: "creche",
-    title: { fr: "Gestion de crèche", en: "Crèche management" },
-    summary: {
-      fr: "Projet communautaire : application de gestion d'une structure de garde d'enfants.",
-      en: "Community project: management app for a childcare centre (crèche).",
-    },
-    tags: [T.community, T.management],
-    hue: ["#14B8A6", "#3B6CFF"],
   },
   {
     slug: "hopital",
     title: { fr: "Gestion hospitalière", en: "Hospital management" },
+    year: "2024",
     summary: {
-      fr: "Logiciel de gestion hospitalière.",
-      en: "Hospital management software.",
+      fr: "Logiciel de bureau pour la gestion hospitalière.",
+      en: "Desktop software for hospital management.",
     },
-    tags: [T.management, T.health],
+    tags: [T.desktop, T.management, T.health],
     hue: ["#06B6D4", "#3B6CFF"],
+  },
+  {
+    slug: "creche",
+    title: { fr: "Projet de crèche", en: "Crèche project" },
+    year: "2025",
+    summary: {
+      fr: "Projet communautaire mené en cours de gestion de projet : la gestion d'une structure de garde d'enfants.",
+      en: "Community project for a project-management course: managing a childcare centre (crèche).",
+    },
+    description: {
+      fr: "Projet communautaire réalisé dans le cadre du cours de gestion de projet. Le travail portait entièrement sur la gestion du projet de crèche, sans partie développement.",
+      en: "Community project carried out for a project-management course. The work focused entirely on managing the crèche project, with no development part.",
+    },
+    tags: [T.pm, T.community],
+    hue: ["#14B8A6", "#3B6CFF"],
   },
   {
     slug: "cisse-freres",
     title: { fr: "Cisse et Frères Groupe BTP", en: "Cisse et Frères Groupe BTP" },
+    year: "2023",
     summary: {
       fr: "Site vitrine pour l'entreprise de BTP Cisse et Frères Groupe.",
       en: "Showcase website for the construction company Cisse et Frères Groupe.",
     },
     tags: [T.showcase, T.web],
+    tech: ["HTML", "CSS"],
     hue: ["#F5B547", "#3B6CFF"],
   },
 ];

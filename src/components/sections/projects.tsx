@@ -1,7 +1,7 @@
 "use client";
 
 import { m, useMotionTemplate, useMotionValue, useSpring } from "framer-motion";
-import { ArrowUpRight, ExternalLink } from "lucide-react";
+import { ArrowUpRight, ExternalLink, Star } from "lucide-react";
 import dynamic from "next/dynamic";
 import { ProjectCover as Cover } from "@/components/project-cover";
 import { useState } from "react";
@@ -86,6 +86,16 @@ function ProjectCard({
               <ArrowUpRight className="size-4" />
             </span>
           </div>
+          {(project.featured || project.year) && (
+            <p className="mt-1 flex items-center gap-2 font-mono text-xs text-muted">
+              {project.year}
+              {project.featured && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-accent-soft px-2 py-0.5 font-sans font-medium text-accent">
+                  <Star className="size-3 fill-current" aria-hidden /> {t.projects.featured}
+                </span>
+              )}
+            </p>
+          )}
           <p className="mt-2 text-sm leading-relaxed text-muted">{project.summary[locale]}</p>
           <div className="mt-auto flex flex-wrap items-center gap-1.5 pt-5">
             {project.tags.map((tag) => (
@@ -139,8 +149,8 @@ export function Projects({ t, locale }: { t: Dictionary; locale: Locale }) {
             t={t}
             locale={locale}
             onOpen={() => setOpenIndex(i)}
-            className={i === 0 ? "lg:col-span-2" : undefined}
-            large={i === 0}
+            className={i === 0 && p.featured ? "lg:col-span-2" : undefined}
+            large={p.featured}
           />
         ))}
 

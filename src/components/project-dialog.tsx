@@ -21,7 +21,8 @@ function ProjectDetail({ project, index, t, locale }: { project: Project; index:
             {tag[locale]}
           </Badge>
         ))}
-        {project.year && <Badge variant="accent">{project.year}</Badge>}
+        {project.featured && <Badge variant="accent">★ {t.projects.featured}</Badge>}
+        {project.year && <Badge>{project.year}</Badge>}
       </div>
       <DialogTitle className="font-display mt-4 text-3xl font-bold sm:text-4xl">{project.title[locale]}</DialogTitle>
       <DialogDescription className="mt-3 text-base leading-relaxed text-muted">

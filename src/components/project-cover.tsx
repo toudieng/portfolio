@@ -1,7 +1,8 @@
+import Image from "next/image";
 import type { Project } from "@/content/profile";
 import { cn } from "@/lib/utils";
 
-/** Abstract generative cover — no screenshot needed. */
+/** Screenshot when `project.image` is set, otherwise an abstract generative cover. */
 export function ProjectCover({ project, index, large }: { project: Project; index: number; large?: boolean }) {
   const [a, b] = project.hue;
   return (
@@ -12,6 +13,15 @@ export function ProjectCover({ project, index, large }: { project: Project; inde
         background: `radial-gradient(120% 90% at 0% 0%, ${a}66, transparent 55%), radial-gradient(120% 90% at 100% 100%, ${b}55, transparent 55%), var(--bg)`,
       }}
     >
+      {project.image && (
+        <Image
+          src={project.image}
+          alt=""
+          fill
+          sizes="(min-width: 1024px) 66vw, (min-width: 768px) 50vw, 100vw"
+          className="object-cover object-top transition-transform duration-700 group-hover:scale-[1.03]"
+        />
+      )}
       <div className="absolute inset-0 bg-grid opacity-70 [mask-image:linear-gradient(to_bottom,#000,transparent)]" />
       <div
         className="absolute -bottom-10 -right-6 size-40 rounded-full blur-2xl transition-transform duration-700 group-hover:scale-150"
